@@ -10,15 +10,16 @@ class Scope(object):
 
 
 class LonganAccount(ProviderAccount):
-    def get_profile_url(self):
-        return self.account.extra_data.get('link')
+    pass
+    # def get_profile_url(self):
+    #     return self.account.extra_data.get('link')
 
-    def get_avatar_url(self):
-        return self.account.extra_data.get('picture')
+    # def get_avatar_url(self):
+    #     return self.account.extra_data.get('picture')
 
-    def to_str(self):
-        dflt = super(LonganAccount, self).to_str()
-        return self.account.extra_data.get('name', dflt)
+    # def to_str(self):
+    #     dflt = super(LonganAccount, self).to_str()
+    #     return self.account.extra_data.get('name', dflt)
 
 
 class LonganProvider(OAuth2Provider):
@@ -30,31 +31,30 @@ class LonganProvider(OAuth2Provider):
         scope = [Scope.PROFILE]
         if QUERY_EMAIL:
             scope.append(Scope.EMAIL)
-        return scope
+        return ['read']
 
-    def get_auth_params(self, request, action):
-        ret = super(LonganProvider, self).get_auth_params(request,
-                                                          action)
-        if action == AuthAction.REAUTHENTICATE:
-            ret['prompt'] = 'select_account consent'
-        return ret
+    # def get_auth_params(self, request, action):
+    #     ret = super(LonganProvider, self).get_auth_params(request,
+    #                                                       action)
+    #     if action == AuthAction.REAUTHENTICATE:
+    #         ret['prompt'] = 'select_account consent'
+    #     return ret
 
     def extract_uid(self, data):
         return str(data['id'])
 
     def extract_common_fields(self, data):
         return dict(email=data.get('email'),
-                    last_name=data.get('family_name'),
-                    first_name=data.get('given_name'))
+                    username=data.get('username'))
 
-    def extract_email_addresses(self, data):
-        ret = []
-        email = data.get('email')
-        if email and data.get('verified_email'):
-            ret.append(EmailAddress(email=email,
-                       verified=True,
-                       primary=True))
-        return ret
+    # def extract_email_addresses(self, data):
+    #     ret = []
+    #     email = data.get('email')
+    #     if email and data.get('verified_email'):
+    #         ret.append(EmailAddress(email=email,
+    #                    verified=True,
+    #                    primary=True))
+    #     return ret
 
 
 provider_classes = [LonganProvider]
