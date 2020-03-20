@@ -23,7 +23,7 @@ class LonganOAuth2Adapter(OAuth2Adapter):
     profile_url = '{0}/api/users/me/'.format(server)
 
     def complete_login(self, request, app, token, **kwargs):
-        headers = {'authorization': 'Basic {0}'.format(token)}
+        headers = {'authorization': 'Bearer {0}'.format(token)}
         resp = requests.get(self.profile_url, headers=headers)
         resp.raise_for_status()
         extra_data = resp.json()
