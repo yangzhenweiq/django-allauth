@@ -22,6 +22,11 @@ def _process_signup(request, sociallogin):
     if not auto_signup:
         request.session['socialaccount_sociallogin'] = sociallogin.serialize()
         url = reverse('socialaccount_signup')
+        if app_settings.app_settings.get('SOCIALACCOUNT_SIGNUP_URL'):
+            name = sociallogin.serialize()['account']['extra_data']['username']
+            phone = sociallogin.serialize()['account']['extra_data']['phone']
+            url = app_settings.app_settings.get('SOCIALACCOUNT_SIGNUP_URL')
+            url += '?type=bind&nickname={}&phone={}'.format(name, phone)
         ret = HttpResponseRedirect(url)
     else:
         # Ok, auto signup it is, at least the e-mail address is ok.
