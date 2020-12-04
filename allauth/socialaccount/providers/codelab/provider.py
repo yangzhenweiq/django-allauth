@@ -9,9 +9,9 @@ class Scope(object):
     PROFILE = 'profile'
 
 
-class LonganProvider(OAuth2Provider):
-    id = 'longan'
-    name = 'Longan'
+class CodelabProvider(OAuth2Provider):
+    id = 'codelab'
+    name = 'Codelab'
     account_class = ProviderAccount
 
     def get_default_scope(self):
@@ -27,4 +27,4 @@ class LonganProvider(OAuth2Provider):
         return dict(email=data.get('email'),
                     username=data.get('username')
 
-provider_classes = [LonganProvider]
+provider_classes = [CodelabProvider]
