@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import messages
 from django.forms import ValidationError
 from django.http import HttpResponseRedirect
@@ -22,10 +23,10 @@ def _process_signup(request, sociallogin):
     if not auto_signup:
         request.session['socialaccount_sociallogin'] = sociallogin.serialize()
         url = reverse('socialaccount_signup')
-        if 'SIGNUP_URL' in app_settings.__dict__.keys():
+        if 'SOCIALACCOUNT_SIGNUP_URL' in settings.__dict__.keys():
             name = sociallogin.serialize()['account']['extra_data']['username']
             phone = sociallogin.serialize()['account']['extra_data']['phone']
-            url = app_settings.__dict__.get('SIGNUP_URL')
+            url = settings.__dict__.get('SOCIALACCOUNT_SIGNUP_URL')
             url += '?type=bind&nickname={}&phone={}'.format(name, phone)
         ret = HttpResponseRedirect(url)
     else:
