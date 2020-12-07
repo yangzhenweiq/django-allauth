@@ -22,10 +22,10 @@ def _process_signup(request, sociallogin):
     if not auto_signup:
         request.session['socialaccount_sociallogin'] = sociallogin.serialize()
         url = reverse('socialaccount_signup')
-        if app_settings.get('SOCIALACCOUNT_SIGNUP_URL'):
+        if 'SOCIALACCOUNT_SIGNUP_URL' in app_settings.__dict__.keys():
             name = sociallogin.serialize()['account']['extra_data']['username']
             phone = sociallogin.serialize()['account']['extra_data']['phone']
-            url = app_settings.get('SOCIALACCOUNT_SIGNUP_URL')
+            url = app_settings.__dict__.get('SOCIALACCOUNT_SIGNUP_URL')
             url += '?type=bind&nickname={}&phone={}'.format(name, phone)
         ret = HttpResponseRedirect(url)
     else:
