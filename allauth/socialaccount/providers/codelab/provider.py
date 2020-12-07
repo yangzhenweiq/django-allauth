@@ -24,7 +24,10 @@ class CodelabProvider(OAuth2Provider):
         return str(data['id'])
 
     def extract_common_fields(self, data):
-        return dict(email=data.get('email'),
-                    username=data.get('username')
+        return dict(
+            email=data.get('email'),
+            username=data.get('username')
+        )
+
 
 provider_classes = [CodelabProvider]
