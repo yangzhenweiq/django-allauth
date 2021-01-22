@@ -19,7 +19,7 @@ from allauth.socialaccount.models import SocialAccount, SocialToken
 from allauth.socialaccount.tests import OAuth2TestsMixin
 from allauth.tests import MockedResponse, TestCase, patch
 
-from .provider import AimofaProvider
+from .provider import Aimofa2Provider
 
 
 @override_settings(
@@ -27,8 +27,8 @@ from .provider import AimofaProvider
     ACCOUNT_SIGNUP_FORM_CLASS=None,
     ACCOUNT_EMAIL_VERIFICATION=account_settings
     .EmailVerificationMethod.MANDATORY)
-class AimofaTests(OAuth2TestsMixin, TestCase):
-    provider_id = AimofaProvider.id
+class Aimofa2Tests(OAuth2TestsMixin, TestCase):
+    provider_id = Aimofa2Provider.id
 
     def get_mocked_response(self,
                             family_name='Penners',
@@ -50,9 +50,9 @@ class AimofaTests(OAuth2TestsMixin, TestCase):
                given_name,
                (repr(verified_email).lower())))
 
-    def test_aimofa_compelete_login_401(self):
-        from allauth.socialaccount.providers.aimofa.views import \
-            AimofaOAuth2Adapter
+    def test_aimofa2_compelete_login_401(self):
+        from allauth.socialaccount.providers.aimofa2.views import \
+            Aimofa2OAuth2Adapter
 
         class LessMockedResponse(MockedResponse):
             def raise_for_status(self):
@@ -62,7 +62,7 @@ class AimofaTests(OAuth2TestsMixin, TestCase):
             reverse(self.provider.id + '_login'),
             dict(process='login'))
 
-        adapter = AimofaOAuth2Adapter(request)
+        adapter = Aimofa2OAuth2Adapter(request)
         app = adapter.get_provider().get_app(request)
         token = SocialToken(token='some_token')
         response_with_401 = LessMockedResponse(
@@ -78,7 +78,7 @@ class AimofaTests(OAuth2TestsMixin, TestCase):
               "message": "Invalid Credentials" }
             }""")
         with patch(
-                'allauth.socialaccount.providers.aimofa.views'
+                'allauth.socialaccount.providers.aimofa2.views'
                 '.requests') as patched_requests:
             patched_requests.get.return_value = response_with_401
             with self.assertRaises(HTTPError):
@@ -114,7 +114,7 @@ class AimofaTests(OAuth2TestsMixin, TestCase):
         def on_signed_up(sender, request, user, **kwargs):
             sociallogin = kwargs['sociallogin']
             self.assertEqual(sociallogin.account.provider,
-                             AimofaProvider.id)
+                             Aimofa2Provider.id)
             self.assertEqual(sociallogin.account.user,
                              user)
             sent_signals.append(sender)
@@ -176,7 +176,7 @@ class AimofaTests(OAuth2TestsMixin, TestCase):
         # Check if we connected...
         self.assertTrue(SocialAccount.objects.filter(
             user=user,
-            provider=AimofaProvider.id).exists())
+            provider=Aimofa2Provider.id).exists())
         # For now, we do not pick up any new e-mail addresses on connect
         self.assertEqual(EmailAddress.objects.filter(user=user).count(), 1)
         self.assertEqual(EmailAddress.objects.filter(
@@ -212,16 +212,16 @@ class AimofaTests(OAuth2TestsMixin, TestCase):
 
 @override_settings(
     SOCIALACCOUNT_PROVIDERS={
-        'aimofa': {
+        'aimofa2': {
             'APP': {
                 'client_id': 'app123id',
-                'key': 'aimofa',
+                'key': 'aimofa2',
                 'secret': 'dummy'
             }
         }
     }
 )
-class AppInSettingsTests(AimofaTests):
+class AppInSettingsTests(Aimofa2Tests):
     """
     Run the same set of tests but without having a SocialApp entry.
     """

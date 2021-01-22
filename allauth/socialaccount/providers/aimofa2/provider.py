@@ -9,9 +9,9 @@ class Scope(object):
     PROFILE = 'profile'
 
 
-class AimofaProvider(OAuth2Provider):
-    id = 'aimofa'
-    name = 'Aimofa'
+class Aimofa2Provider(OAuth2Provider):
+    id = 'aimofa2'
+    name = 'Aimofa2'
     account_class = ProviderAccount
 
     def get_default_scope(self):
@@ -30,4 +30,4 @@ class AimofaProvider(OAuth2Provider):
         )
 
 
-provider_classes = [AimofaProvider]
+provider_classes = [Aimofa2Provider]

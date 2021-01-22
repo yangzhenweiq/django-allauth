@@ -7,11 +7,11 @@ from allauth.socialaccount.providers.oauth2.views import (
     OAuth2LoginView,
 )
 
-from .provider import AimofaProvider
+from .provider import Aimofa2Provider
 
 
-class AimofaOAuth2Adapter(OAuth2Adapter):
-    provider_id = AimofaProvider.id
+class Aimofa2OAuth2Adapter(OAuth2Adapter):
+    provider_id = Aimofa2Provider.id
     settings = app_settings.PROVIDERS.get(provider_id, {})
     server = settings.get('SERVER_URL', 'http://auth.localhost')
     access_token_url = '{0}{1}'.format(server, settings.get('ACCESS_TOKEN_URL', '/o/token/'))
@@ -29,5 +29,5 @@ class AimofaOAuth2Adapter(OAuth2Adapter):
         return login
 
 
-oauth2_login = OAuth2LoginView.adapter_view(AimofaOAuth2Adapter)
-oauth2_callback = OAuth2CallbackView.adapter_view(AimofaOAuth2Adapter)
+oauth2_login = OAuth2LoginView.adapter_view(Aimofa2OAuth2Adapter)
+oauth2_callback = OAuth2CallbackView.adapter_view(Aimofa2OAuth2Adapter)
