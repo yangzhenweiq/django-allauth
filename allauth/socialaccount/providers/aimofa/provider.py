@@ -11,7 +11,7 @@ class Scope(object):
 
 class AimofaProvider(OAuth2Provider):
     id = 'aimofa'
-    name = 'aimofa'
+    name = 'Aimofa'
     account_class = ProviderAccount
 
     def get_default_scope(self):
