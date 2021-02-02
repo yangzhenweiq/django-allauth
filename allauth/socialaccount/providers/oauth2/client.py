@@ -63,13 +63,23 @@ class OAuth2Client(object):
             params = data
             data = None
         # TODO: Proper exception handling
-        resp = requests.request(
-            self.access_token_method,
-            url,
-            params=params,
-            data=data,
-            headers=self.headers,
-            auth=auth)
+        # 重试的次数
+        try_times = 3
+        for i in range(try_times):
+            try:
+                resp = requests.request(
+                    self.access_token_method,
+                    url,
+                    params=params,
+                    data=data,
+                    headers=self.headers,
+                    auth=auth,
+                    timeout=(3.05, 7))
+                #注意此处也可能是302等状态码
+                if resp.status_code in [200, 201]:
+                    break
+            except Exception as ex:
+                print('get access token requests failed {i} time') 
 
         access_token = None
         if resp.status_code in [200, 201]:
